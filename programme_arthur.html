@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme Arthur — 5 semaines</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #f5f4f0; color: #2c2c2a; padding: 2rem 1rem; }
+  .container { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; font-weight: 600; text-align: center; margin-bottom: 0.25rem; color: #2c2c2a; }
+  .subtitle { font-size: 0.8rem; color: #888780; text-align: center; margin-bottom: 1.5rem; }
+  .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; justify-content: center; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #5f5e5a; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .week-card { background: #fff; border: 0.5px solid #d3d1c7; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .week-header { display: flex; align-items: center; gap: 12px; padding: 0.85rem 1.25rem; cursor: pointer; user-select: none; }
+  .week-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 8px; background: #f1efe8; color: #5f5e5a; white-space: nowrap; }
+  .week-theme { font-size: 15px; font-weight: 500; color: #2c2c2a; flex: 1; }
+  .week-tag { font-size: 11px; padding: 3px 10px; border-radius: 8px; }
+  .tag-sciences { background: #E1F5EE; color: #0F6E56; }
+  .tag-maths    { background: #E6F1FB; color: #185FA5; }
+  .tag-histoire { background: #FAEEDA; color: #854F0B; }
+  .tag-techno   { background: #EAF3DE; color: #3B6D11; }
+  .chevron { font-size: 16px; color: #888780; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .week-body { display: none; border-top: 0.5px solid #d3d1c7; }
+  .week-body.open { display: block; }
+  .day-grid { display: grid; gap: 8px; padding: 1rem 1.25rem; }
+  .day-label { font-size: 11px; font-weight: 500; color: #888780; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .day-block { border-radius: 8px; padding: 8px 10px; margin-bottom: 6px; text-decoration: none; display: block; transition: opacity 0.15s; }
+  .day-block:hover { opacity: 0.82; }
+  .day-block.no-link { cursor: default; }
+  .block-title { font-size: 12px; font-weight: 500; margin-bottom: 2px; display: flex; align-items: flex-start; gap: 4px; }
+  .block-title .ti { font-size: 11px; margin-top: 1px; flex-shrink: 0; }
+  .block-desc { font-size: 11px; line-height: 1.4; }
+  .block-maths    { background: #E1F5EE; }
+  .block-maths    .block-title, .block-maths    .block-desc { color: #0F6E56; }
+  .block-sciences { background: #E6F1FB; }
+  .block-sciences .block-title, .block-sciences .block-desc { color: #185FA5; }
+  .block-monde    { background: #FAEEDA; }
+  .block-monde    .block-title, .block-monde    .block-desc { color: #854F0B; }
+  .block-langue   { background: #EEEDFE; }
+  .block-langue   .block-title, .block-langue   .block-desc { color: #3C3489; }
+  .block-techno   { background: #EAF3DE; }
+  .block-techno   .block-title, .block-techno   .block-desc { color: #3B6D11; }
+  .block-desc { opacity: 0.85; }
+  .timing-bar { display: flex; gap: 8px; padding: 0.75rem 1.25rem; background: #f1efe8; border-top: 0.5px solid #d3d1c7; flex-wrap: wrap; }
+  .timing-pill { font-size: 11px; padding: 3px 10px; border-radius: 8px; background: #fff; border: 0.5px solid #d3d1c7; color: #5f5e5a; }
+  .footer { text-align: center; font-size: 11px; color: #b4b2a9; margin-top: 1.5rem; }
+  @media (max-width: 600px) {
+    .day-grid { grid-template-columns: 1fr 1fr !important; }
+    .week-theme { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Programme de cours — Arthur</h1>
+  <p class="subtitle">5 semaines · 2h par jour · 09h00–11h00</p>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div> Maths</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div> Sciences</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#BA7517"></div> Monde / hist-géo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div> Langue / lecture</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#639922"></div> Techno / code</div>
+    <div class="legend-item"><i class="ti ti-external-link" style="font-size:12px;color:#888780"></i><span>= lien cliquable</span></div>
+  </div>
+
+  <div id="weeks"></div>
+  <p class="footer">Programme généré avec Claude · Anthropic</p>
+</div>
+
+<script>
+const weeks = [
+  {
+    n:1, theme:"Les nombres et l'univers", tags:["sciences","maths"],
+    cols:4,
+    timing:["09h00 – 09h55 : bloc A","pause 10 min","10h05 – 11h00 : bloc B"],
+    days:[
+      { label:"Mardi", blocks:[
+        { type:"maths",    title:"Fractions & décimaux",    desc:"Exercices interactifs",       url:"https://fr.khanacademy.org/math/arithmetic/fractions" },
+        { type:"sciences", title:"Le système solaire",      desc:"Modèle 3D interactif",        url:"https://www.solarsystemscope.com" }
+      ]},
+      { label:"Mercredi", blocks:[
+        { type:"maths",    title:"Mesures & conversions",   desc:"Quiz unités SI",              url:"https://fr.khanacademy.org/math/cc-sixth-grade-math/cc-6th-factors-and-multiples/cc-6th-converting-units/e/unit_conversion" },
+        { type:"sciences", title:"Gravité & orbites",       desc:"Simulateur PhET",             url:"https://phet.colorado.edu/fr/simulations/gravity-and-orbits" }
+      ]},
+      { label:"Jeudi", blocks:[
+        { type:"monde",    title:"Puissances de 10",        desc:"Visualiser l'univers",        url:"https://www.jpl.nasa.gov/edu/teach/activity/powers-of-10/" },
+        { type:"techno",   title:"Scratch : vaisseau",      desc:"Éviter des astéroïdes",       url:"https://scratch.mit.edu/projects/editor" }
+      ]},
+      { label:"Vendredi", blocks:[
+        { type:"sciences", title:"Constellations",          desc:"Stellarium interactif",       url:"https://stellarium-web.org" },
+        { type:"maths",    title:"Quiz récap semaine 1",    desc:"Lumni système solaire",       url:"https://www.lumni.fr/quiz/les-planetes-du-systeme-solaire" }
+      ]}
+    ]
+  },
+  {
+    n:2, theme:"La matière et ses transformations", tags:["sciences","maths"],
+    cols:5,
+    timing:["09h00 – 09h55 : bloc A","pause 10 min","10h05 – 11h00 : bloc B"],
+    days:[
+      { label:"Lundi", blocks:[
+        { type:"sciences", title:"Atomes & molécules",      desc:"PhET : construire molécules", url:"https://phet.colorado.edu/fr/simulations/build-a-molecule" },
+        { type:"maths",    title:"Ratios & pourcentages",   desc:"Khan Academy",                url:"https://fr.khanacademy.org/math/cc-sixth-grade-math/cc-6th-ratios-prop-topic/cc-6th-ratios/e/ratio_word_problems" }
+      ]},
+      { label:"Mardi", blocks:[
+        { type:"sciences", title:"États de la matière",     desc:"Simulation PhET",             url:"https://phet.colorado.edu/fr/simulations/states-of-matter" },
+        { type:"monde",    title:"Lavoisier & l'alchimie",  desc:"Vidéo Lumni",                 url:"https://www.lumni.fr/video/antoine-lavoisier-le-pere-de-la-chimie-moderne" }
+      ]},
+      { label:"Mercredi", blocks:[
+        { type:"sciences", title:"Densité & flottaison",    desc:"Simulation PhET",             url:"https://phet.colorado.edu/fr/simulations/density" },
+        { type:"maths",    title:"Lire des graphiques",     desc:"Khan Academy",                url:"https://fr.khanacademy.org/math/cc-sixth-grade-math/cc-6th-data-statistics/cc-6th-creating-graphs/e/bar-graph" }
+      ]},
+      { label:"Jeudi", blocks:[
+        { type:"sciences", title:"Réactions chimiques",     desc:"Vidéo vinaigre + bicarbonate",url:"https://www.youtube.com/watch?v=2xkz2p4MFQ4" },
+        { type:"techno",   title:"Scratch : molécules",     desc:"Animer des particules",       url:"https://scratch.mit.edu/projects/editor" }
+      ]},
+      { label:"Vendredi", blocks:[
+        { type:"maths",    title:"Quiz récap semaine 2",    desc:"Lumni chimie",                url:"https://www.lumni.fr/quiz/la-matiere-et-ses-etats" },
+        { type:"langue",   title:"Résumé : l'atome",        desc:"10 lignes, exercice papier",  url:null }
+      ]}
+    ]
+  },
+  {
+    n:3, theme:"Le vivant et son organisation", tags:["sciences","maths"],
+    cols:5,
+    timing:["09h00 – 09h55 : bloc A","pause 10 min","10h05 – 11h00 : bloc B"],
+    days:[
+      { label:"Lundi", blocks:[
+        { type:"sciences", title:"La cellule vivante",      desc:"Cells Alive interactif",      url:"https://www.cellsalive.com" },
+        { type:"maths",    title:"Proportionnalité",        desc:"Tailles cellule/virus",       url:"https://fr.khanacademy.org/math/cc-seventh-grade-math/cc-7th-ratio-proportion/cc-7th-proportional-rel/e/proportional_relationships" }
+      ]},
+      { label:"Mardi", blocks:[
+        { type:"sciences", title:"La photosynthèse",        desc:"Animation + quiz Lumni",      url:"https://www.lumni.fr/video/la-photosynthese" },
+        { type:"monde",    title:"Les biomes de la Terre",  desc:"Carte interactive WWF",       url:"https://www.worldwildlife.org/biomes" }
+      ]},
+      { label:"Mercredi", blocks:[
+        { type:"sciences", title:"Chaînes alimentaires",    desc:"Jeu interactif BBC",          url:"https://www.bbc.co.uk/bitesize/topics/zx882hv/articles/z3c2qty" },
+        { type:"maths",    title:"Moyenne & médiane",       desc:"Données biodiversité",        url:"https://fr.khanacademy.org/math/cc-sixth-grade-math/cc-6th-data-statistics/cc-6th-mean-median-mode/e/calculating-the-mean-from-various-data-displays" }
+      ]},
+      { label:"Jeudi", blocks:[
+        { type:"maths",    title:"Croissance exponentielle",desc:"Bactéries : simulation",      url:"https://fr.khanacademy.org/math/algebra/x2f8bb11595b61c86:exponential-growth-decay/x2f8bb11595b61c86:exponential-vs-linear-growth/e/exponential-growth" },
+        { type:"techno",   title:"Scratch : proie-prédateur",desc:"Lapins et renards",         url:"https://scratch.mit.edu/projects/editor" }
+      ]},
+      { label:"Vendredi", blocks:[
+        { type:"sciences", title:"Quiz récap semaine 3",    desc:"Lumni SVT",                   url:"https://www.lumni.fr/quiz/la-cellule-et-le-vivant" },
+        { type:"langue",   title:"Pour ou contre les OGM ?",desc:"5 lignes argumentées",        url:null }
+      ]}
+    ]
+  },
+  {
+    n:4, theme:"L'énergie dans tous ses états", tags:["sciences","techno"],
+    cols:5,
+    timing:["09h00 – 09h55 : bloc A","pause 10 min","10h05 – 11h00 : bloc B"],
+    days:[
+      { label:"Lundi", blocks:[
+        { type:"sciences", title:"Formes d'énergie",        desc:"Vidéo Lumni",                 url:"https://www.lumni.fr/video/les-differentes-formes-d-energie" },
+        { type:"maths",    title:"Puissance & consommation",desc:"Khan Academy",                url:"https://fr.khanacademy.org/science/physics/work-and-energy" }
+      ]},
+      { label:"Mardi", blocks:[
+        { type:"sciences", title:"Circuits électriques",    desc:"Simulateur PhET",             url:"https://phet.colorado.edu/fr/simulations/circuit-construction-kit-dc" },
+        { type:"monde",    title:"Énergies renouvelables",  desc:"Our World in Data",           url:"https://ourworldindata.org/renewable-energy" }
+      ]},
+      { label:"Mercredi", blocks:[
+        { type:"sciences", title:"Lumière & réfraction",    desc:"PhET optique",                url:"https://phet.colorado.edu/fr/simulations/bending-light" },
+        { type:"maths",    title:"Tracer des graphiques",   desc:"Google Sheets tutoriel",      url:"https://support.google.com/docs/answer/63824?hl=fr" }
+      ]},
+      { label:"Jeudi", blocks:[
+        { type:"techno",   title:"Scratch : panneau solaire",desc:"Lumière → watts simulé",    url:"https://scratch.mit.edu/projects/editor" },
+        { type:"maths",    title:"Calculer son empreinte",  desc:"Nos Gestes Climat",           url:"https://nosgestesclimat.fr" }
+      ]},
+      { label:"Vendredi", blocks:[
+        { type:"sciences", title:"Quiz récap semaine 4",    desc:"Lumni énergie",               url:"https://www.lumni.fr/quiz/l-energie-et-ses-formes" },
+        { type:"langue",   title:"Comment fonctionne une pile ?",desc:"Présentation orale 2 min",url:null }
+      ]}
+    ]
+  },
+  {
+    n:5, theme:"La Terre, le climat, les humains", tags:["sciences","monde"],
+    cols:5,
+    timing:["09h00 – 09h55 : bloc A","pause 10 min","10h05 – 11h00 : bloc B"],
+    days:[
+      { label:"Lundi", blocks:[
+        { type:"sciences", title:"Structure de la Terre",   desc:"Tectonique des plaques",      url:"https://www.nationalgeographic.org/interactive/plate-tectonics/" },
+        { type:"maths",    title:"Échelles géologiques",    desc:"Frise chronologique Khan",    url:"https://fr.khanacademy.org/science/biology/history-of-life-on-earth" }
+      ]},
+      { label:"Mardi", blocks:[
+        { type:"sciences", title:"Données climatiques",     desc:"NASA Climate Kids",           url:"https://climatekids.nasa.gov/climate-change-evidence/" },
+        { type:"monde",    title:"Quiz cartographique",     desc:"Reliefs & pays : Seterra",    url:"https://www.seterra.com/fr/vgp/3010" }
+      ]},
+      { label:"Mercredi", blocks:[
+        { type:"sciences", title:"Effet de serre",          desc:"Simulation PhET",             url:"https://phet.colorado.edu/fr/simulations/greenhouse-effect" },
+        { type:"maths",    title:"Données climatiques",     desc:"Our World in Data",           url:"https://ourworldindata.org/co2-and-greenhouse-gas-emissions" }
+      ]},
+      { label:"Jeudi", blocks:[
+        { type:"techno",   title:"Data viz : températures", desc:"Données mondiales interactives",url:"https://ourworldindata.org/grapher/average-monthly-surface-temperature" },
+        { type:"maths",    title:"Empreinte carbone",       desc:"Simulateur ADEME",            url:"https://nosgestesclimat.fr" }
+      ]},
+      { label:"Vendredi", blocks:[
+        { type:"sciences", title:"Quiz récap semaine 5",    desc:"Our World in Data",           url:"https://ourworldindata.org/quiz/climate-change" },
+        { type:"monde",    title:"Bilan des 5 semaines",    desc:"Ce qu'Arthur retient",        url:null }
+      ]}
+    ]
+  }
+];
+
+const tagClasses = { sciences:"tag-sciences", maths:"tag-maths", monde:"tag-histoire", techno:"tag-techno" };
+const tagLabels  = { sciences:"Sciences", maths:"Maths", monde:"Monde", techno:"Techno" };
+
+function build() {
+  const container = document.getElementById("weeks");
+  weeks.forEach((w, i) => {
+    const card = document.createElement("div");
+    card.className = "week-card";
+
+    const tags = w.tags.map(t => `<span class="week-tag ${tagClasses[t]||''}">${tagLabels[t]||t}</span>`).join(" ");
+    const header = document.createElement("div");
+    header.className = "week-header";
+    header.innerHTML = `<span class="week-badge">Semaine ${w.n}</span><span class="week-theme">${w.theme}</span>${tags}<i class="ti ti-chevron-down chevron"></i>`;
+
+    const body = document.createElement("div");
+    body.className = "week-body" + (i === 0 ? " open" : "");
+
+    const grid = document.createElement("div");
+    grid.className = "day-grid";
+    grid.style.gridTemplateColumns = `repeat(${w.cols}, minmax(0,1fr))`;
+
+    w.days.forEach(d => {
+      const col = document.createElement("div");
+      let html = `<div class="day-label">${d.label}</div>`;
+      d.blocks.forEach(b => {
+        const hasLink = !!b.url;
+        const tag = hasLink ? "a" : "div";
+        const icon = hasLink ? `<i class="ti ti-external-link"></i>` : "";
+        html += `<${tag}${hasLink ? ` href="${b.url}" target="_blank" rel="noopener"` : ""} class="day-block block-${b.type}${!hasLink ? ' no-link' : ''}">
+          <div class="block-title">${b.title}${icon}</div>
+          <div class="block-desc">${b.desc}</div>
+        </${tag}>`;
+      });
+      col.innerHTML = html;
+      grid.appendChild(col);
+    });
+
+    const timing = document.createElement("div");
+    timing.className = "timing-bar";
+    timing.innerHTML = w.timing.map(t => `<span class="timing-pill">${t}</span>`).join("");
+
+    body.appendChild(grid);
+    body.appendChild(timing);
+    card.appendChild(header);
+    card.appendChild(body);
+    container.appendChild(card);
+
+    header.addEventListener("click", () => {
+      const open = body.classList.toggle("open");
+      header.querySelector(".chevron").classList.toggle("open", open);
+    });
+  });
+}
+build();
+</script>
+</body>
+</html>
